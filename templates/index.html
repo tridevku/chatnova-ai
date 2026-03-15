@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ChatNova AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>ChatNova AI</h1>
+        <p>Your Smart Chat Assistant</p>
+
+        <div id="chatbox"></div>
+
+        <div class="input-area">
+            <input type="text" id="message" placeholder="Ask something...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+    </div>
+
+    <script>
+        async function sendMessage() {
+
+            let input = document.getElementById("message").value
+            let chatbox = document.getElementById("chatbox")
+
+            chatbox.innerHTML += "<p><b>You:</b> " + input + "</p>"
+
+            let response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: input
+                })
+            })
+
+            let data = await response.json()
+
+            chatbox.innerHTML += "<p><b>ChatNova:</b> " + data.reply + "</p>"
+
+            document.getElementById("message").value = ""
+
+        }
+    </script>
+
+</body>
+
+</html>
